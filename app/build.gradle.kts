@@ -94,3 +94,6 @@ dependencies {
     implementation(libs.androidx.hilt.navigation.fragment)
     kapt(libs.hilt.compiler)
 }
+kapt {
+    correctErrorTypes = true
+}
