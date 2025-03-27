@@ -1,5 +1,7 @@
 package com.example.p12_joiefull.ui
 
+import android.content.Context
+import android.content.Intent
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.p12_joiefull.data.repository.Repository
@@ -33,5 +35,17 @@ class MainActivityViewModel @Inject constructor(
             _products.value = productsList
             _isLoading.value = false
         }
+    }
+    fun shareProduct(context: Context, product: Product) {
+        // Créez une intention de partage
+        val shareIntent = Intent().apply {
+            action = Intent.ACTION_SEND
+            type = "text/plain"
+            putExtra(Intent.EXTRA_TEXT, "Regarde cet article : ${product.name} \n ${product.picture.url}")
+        }
+
+        // Utilisez le contexte pour démarrer l'intention et afficher le sélecteur de partage
+        context.startActivity(Intent.createChooser(shareIntent, "Partage cet article via"))
+
     }
 }
