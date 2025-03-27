@@ -1,5 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <!-- Thème principal de ton application -->
+    <style name="Theme.P12_Joiefull" parent="android:Theme.Material.Light.NoActionBar">
+        <!-- Personnalise ici ton thème principal, si nécessaire -->
+    </style>
 
-    <style name="Theme.P12_Joiefull" parent="android:Theme.Material.Light.NoActionBar" />
+    <!-- Thème pour le SplashScreen -->
+    <style name="Theme.P12_Joiefull.Starting" parent="Theme.SplashScreen.IconBackground">
+        <!-- Couleur de fond pour le splashscreen -->
+        <item name="windowSplashScreenBackground">@color/splash_background_color</item>
+
+        <!-- Icône ou logo pour le splashscreen -->
+        <item name="windowSplashScreenAnimatedIcon">@drawable/ic_launcher_foreground_joiefull</item>
+
+        <!-- Définir la couleur du cercle autour de l'icône (tu peux le rendre transparent) -->
+        <item name="windowSplashScreenIconBackgroundColor">@android:color/transparent</item>
+
+
+        <!-- Thème qui sera appliqué après le splashscreen -->
+        <item name="postSplashScreenTheme">@style/Theme.P12_Joiefull</item>
+    </style>
 </resources>

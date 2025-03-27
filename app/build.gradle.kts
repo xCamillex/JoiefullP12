@@ -65,6 +65,8 @@ dependencies {
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
 
+    implementation(libs.androidx.core.splashscreen)
+
     // ViewModel avec Compose
     implementation(libs.androidx.lifecycle.viewmodel.compose)
 
@@ -74,12 +76,16 @@ dependencies {
     implementation(libs.converter.moshi)
     // Moshi JSON Library
     implementation(libs.moshi.kotlin)
+    // OkHttp for HTTP client (included as Retrofit uses it internally)
+    implementation(libs.okhttp)
+    implementation(libs.json)
+    implementation(libs.moshi)
 
 
     // Glide
     implementation(libs.glide)
     kapt("com.github.bumptech.glide:compiler:4.12.0")
-    implementation("com.github.bumptech.glide:compose:1.0.0-beta01")
+    implementation(libs.compose)
 
     //Hilt
     implementation(libs.hilt.android)
