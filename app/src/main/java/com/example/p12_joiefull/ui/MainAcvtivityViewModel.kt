@@ -13,15 +13,15 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class MainActivityViewModel @Inject constructor(
+open class MainActivityViewModel @Inject constructor(
     private val productRepository: Repository
 ) : ViewModel() {
 
     private val _products = MutableStateFlow<List<Product>>(emptyList())
-    val products: StateFlow<List<Product>> = _products
+    open val products: StateFlow<List<Product>> = _products
 
     private val _isLoading = MutableStateFlow(false)
-    val isLoading: StateFlow<Boolean> = _isLoading
+    open val isLoading: StateFlow<Boolean> = _isLoading
 
     init {
         getProductList()
