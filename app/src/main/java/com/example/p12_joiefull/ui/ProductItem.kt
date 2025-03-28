@@ -4,6 +4,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -19,6 +20,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextDecoration
@@ -26,6 +28,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
+import com.example.p12_joiefull.R
 import com.example.p12_joiefull.model.Picture
 import com.example.p12_joiefull.model.Product
 
@@ -55,7 +58,7 @@ fun ProductItem(
                 )
                 Box(
                     modifier = Modifier
-                        .size(36.dp, 16.dp)
+                        .size(42.dp, 16.dp)
                         .align(Alignment.BottomEnd)
                         .offset(
                             x = (-8).dp,
@@ -65,7 +68,6 @@ fun ProductItem(
                         .background(Color.White)
                 ) {
                     Row(
-                        verticalAlignment = Alignment.CenterVertically,
                         modifier = Modifier
                             .align(Alignment.Center)
                     ) {
@@ -76,26 +78,51 @@ fun ProductItem(
                             tint = Color.Black,
                             modifier = Modifier
                                 .size(18.dp)
-
+                                .align(Alignment.CenterVertically)
                         )
                         Text(
                             text = product.likes.toString(),
-                            fontSize = 12.sp, // Adjust size to fit
+                            fontSize = 12.sp,
                             color = Color.Black,
                             fontWeight = FontWeight.Bold,
-
+                            modifier = Modifier
+                                .align(Alignment.CenterVertically)
+                                .offset(y = (-4).dp, x = (2).dp)
                         )
                     }
                 }
             }
+            Row(
+                modifier = Modifier
+                    .width(150.dp)
+                    .padding(top = 4.dp),
+            ) {
+                Text(
+                    text = product.name,
+                    modifier = Modifier
+                        .align(Alignment.CenterVertically)
+                        .width(150.dp).weight(1f),
+                    fontWeight = FontWeight.Bold,
+                    fontSize = 12.sp,
+                )
+                Icon(
+                    painter = painterResource(R.drawable.star),
+                    tint = Color(0xFFFFC700),
+                    contentDescription = "Rate",
+                    modifier = Modifier
+                        .size(12.dp)
+                        .align(Alignment.CenterVertically)
+                )
+                Spacer(modifier = Modifier.width(4.dp))
 
-            Text(
-                text = product.name,
-                modifier = Modifier.width(150.dp),
-                fontWeight = FontWeight.Bold,
-                fontSize = 12.sp,// Ensure width matches image
-            )
-
+                Text(
+                    text = "4.6",
+                    fontWeight = FontWeight.Bold,
+                    fontSize = 12.sp,
+                    textAlign = TextAlign.Right,
+                    modifier = Modifier.align(Alignment.CenterVertically)
+                )
+            }
             // Row to display price and original price
             Row(
                 modifier = Modifier

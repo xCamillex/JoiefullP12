@@ -58,7 +58,7 @@ fun ProductDetail(
     modifier: Modifier = Modifier
 ) {
     var rating by remember {
-        mutableStateOf(1f)
+        mutableStateOf(0f)
     }
     Column(
         modifier = modifier.fillMaxSize()
@@ -117,7 +117,8 @@ fun ProductDetail(
                             y = (-16).dp
                         )
                         .clip(RoundedCornerShape(16.dp))
-                        .background(Color.White)
+                        .background(Color.White),
+                    contentAlignment = Alignment.Center
                 ) {
                     Row(
                         modifier = Modifier
@@ -163,7 +164,11 @@ fun ProductDetail(
                     painter = painterResource(R.drawable.star),
                     tint = Color(0xFFFFC700),
                     contentDescription = "Rate",
+                    modifier = Modifier
+                        .size(20.dp)
+                        .align(Alignment.CenterVertically)
                 )
+                Spacer(modifier = Modifier.padding(4.dp))
                 Text(
                     text = product.likes.toString(),
                     fontWeight = FontWeight.Bold,
@@ -221,7 +226,7 @@ fun ProductDetail(
             OutlinedTextField(
                 value = textState.value,
                 onValueChange = { textState.value = it },
-                label = { Text("Enter text") },
+                label = { Text("Partagez ici vos impressions sur cette pièce") },
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(top = 8.dp),
