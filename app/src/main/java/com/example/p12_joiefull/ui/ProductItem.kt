@@ -24,6 +24,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextDecoration
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -101,7 +102,9 @@ fun ProductItem(
                     text = product.name,
                     modifier = Modifier
                         .align(Alignment.CenterVertically)
-                        .width(150.dp).weight(1f),
+                        .weight(1f),
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis,
                     fontWeight = FontWeight.Bold,
                     fontSize = 12.sp,
                 )

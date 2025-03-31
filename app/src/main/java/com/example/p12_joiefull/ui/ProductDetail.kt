@@ -55,7 +55,8 @@ fun ProductDetail(
     viewModel: MainActivityViewModel,
     navController: NavController,
     product: Product,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    showBackButton: Boolean = true
 ) {
     var rating by remember {
         mutableStateOf(0f)
@@ -82,17 +83,19 @@ fun ProductDetail(
                         .clip(RoundedCornerShape(16.dp)),
                     contentScale = ContentScale.Crop
                 )
-                IconButton(
-                    onClick = { navController.navigateUp() },
-                    modifier = Modifier
-                        .align(Alignment.TopStart)
-                        .size(70.dp),
-                ) {
-                    Icon(
-                        imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-                        contentDescription = "Back to main screen button",
-                        tint = Color.Black
-                    )
+                if (showBackButton) {
+                    IconButton(
+                        onClick = { navController.navigateUp() },
+                        modifier = Modifier
+                            .align(Alignment.TopStart)
+                            .size(70.dp),
+                    ) {
+                        Icon(
+                            imageVector = Icons.AutoMirrored.Filled.ArrowBack,
+                            contentDescription = "Back to main screen button",
+                            tint = Color.Black
+                        )
+                    }
                 }
                 val context = LocalContext.current
                 IconButton(
