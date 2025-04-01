@@ -5,6 +5,7 @@ import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -14,6 +15,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
@@ -185,7 +187,8 @@ fun ProductDetailContent(
                                 }
                                 Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
                             },
-                        verticalAlignment = Alignment.CenterVertically // Aligner verticalement au centre
+                        horizontalArrangement = Arrangement.Center, // Centre horizontalement
+                        verticalAlignment = Alignment.CenterVertically // Centre verticalement
                     ) {
                         Icon(
                             imageVector = if (isFavorite) Icons.Filled.Favorite else Icons.Outlined.FavoriteBorder,
@@ -193,19 +196,15 @@ fun ProductDetailContent(
                             tint = Color.Black,
                             modifier = Modifier
                                 .size(20.dp)
-                            // .align(Alignment.CenterVertically)
                         )
+                        Spacer(modifier = Modifier.width(4.dp))
                         Text(
                             text = product.likes.toString(),
-                            modifier = Modifier
-                                .weight(1f)
-                                .offset(
-                                    y = (-2).dp,
-                                    x = 2.dp
-                                ),
                             fontSize = 18.sp, // Taille du texte
                             color = Color.Black,
                             fontWeight = FontWeight.Bold, // Mettre le texte en gras
+                            modifier = Modifier
+                                .offset(y = (-2).dp, x = (2).dp)
                         )
                     }
                 }

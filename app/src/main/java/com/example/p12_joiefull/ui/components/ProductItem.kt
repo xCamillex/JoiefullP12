@@ -102,7 +102,6 @@ fun ProductItem(
                             tint = Color.Black,
                             modifier = Modifier
                                 .size(18.dp)
-                                .align(Alignment.CenterVertically)
                         )
                         Text(
                             text = product.likes.toString(),
@@ -110,7 +109,6 @@ fun ProductItem(
                             color = Color.Black,
                             fontWeight = FontWeight.Bold,
                             modifier = Modifier
-                                .align(Alignment.CenterVertically)
                                 .offset(y = (-4).dp, x = (2).dp)
                         )
                     }
