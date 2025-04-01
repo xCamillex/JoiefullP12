@@ -1,4 +1,4 @@
-package com.example.p12_joiefull.ui
+package com.example.p12_joiefull.ui.components
 
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -16,7 +16,6 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.p12_joiefull.R
-import kotlin.math.roundToInt
 
 
 @Composable

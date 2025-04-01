@@ -1,4 +1,4 @@
-package com.example.p12_joiefull.ui
+package com.example.p12_joiefull.ui.screens.detail
 
 import android.widget.Toast
 import androidx.compose.foundation.Image
@@ -48,8 +48,10 @@ import coil.compose.rememberAsyncImagePainter
 import com.example.p12_joiefull.R
 import com.example.p12_joiefull.data.remote.ApiService
 import com.example.p12_joiefull.data.repository.Repository
-import com.example.p12_joiefull.model.Picture
-import com.example.p12_joiefull.model.Product
+import com.example.p12_joiefull.domain.model.Picture
+import com.example.p12_joiefull.domain.model.Product
+import com.example.p12_joiefull.ui.components.StarRatingBar
+import com.example.p12_joiefull.ui.screens.main.MainActivityViewModel
 import kotlinx.coroutines.runBlocking
 
 

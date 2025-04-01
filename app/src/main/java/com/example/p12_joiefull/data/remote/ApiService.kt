@@ -1,6 +1,6 @@
 package com.example.p12_joiefull.data.remote
 
-import com.example.p12_joiefull.model.Product
+import com.example.p12_joiefull.domain.model.Product
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import retrofit2.Retrofit

@@ -1,10 +1,13 @@
-package com.example.p12_joiefull.ui
+package com.example.p12_joiefull.navigation
 
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import com.example.p12_joiefull.model.Product
+import com.example.p12_joiefull.domain.model.Product
+import com.example.p12_joiefull.ui.screens.main.MainActivityViewModel
+import com.example.p12_joiefull.ui.screens.main.MainScreen
+import com.example.p12_joiefull.ui.screens.detail.ProductDetail
 
 @Composable
 fun AppNavHost(navController: NavHostController, products: List<Product>, viewModel: MainActivityViewModel) {

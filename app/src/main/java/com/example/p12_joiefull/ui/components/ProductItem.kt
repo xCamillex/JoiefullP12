@@ -1,4 +1,4 @@
-package com.example.p12_joiefull.ui
+package com.example.p12_joiefull.ui.components
 
 import android.widget.Toast
 import androidx.compose.foundation.background
@@ -39,8 +39,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import com.example.p12_joiefull.R
-import com.example.p12_joiefull.model.Picture
-import com.example.p12_joiefull.model.Product
+import com.example.p12_joiefull.domain.model.Picture
+import com.example.p12_joiefull.domain.model.Product
 
 @Composable
 fun ProductItem(

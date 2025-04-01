@@ -1,7 +1,7 @@
 package com.example.p12_joiefull.data.repository
 
 import com.example.p12_joiefull.data.remote.ApiService
-import com.example.p12_joiefull.model.Product
+import com.example.p12_joiefull.domain.model.Product
 import javax.inject.Inject
 
 

@@ -1,6 +1,5 @@
-package com.example.p12_joiefull.ui
+package com.example.p12_joiefull.ui.screens.main
 
-import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
@@ -32,8 +31,11 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
-import com.example.p12_joiefull.model.Picture
-import com.example.p12_joiefull.model.Product
+import com.example.p12_joiefull.domain.model.Picture
+import com.example.p12_joiefull.domain.model.Product
+import com.example.p12_joiefull.ui.screens.detail.FakeRepository
+import com.example.p12_joiefull.ui.screens.detail.ProductDetail
+import com.example.p12_joiefull.ui.components.ProductItem
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 

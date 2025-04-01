@@ -9,6 +9,8 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.navigation.compose.rememberNavController
+import com.example.p12_joiefull.navigation.AppNavHost
+import com.example.p12_joiefull.ui.screens.main.MainActivityViewModel
 
 import com.example.p12_joiefull.ui.theme.P12_JoiefullTheme
 import dagger.hilt.android.AndroidEntryPoint

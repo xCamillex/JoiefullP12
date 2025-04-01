@@ -1,4 +1,4 @@
-package com.example.p12_joiefull.model
+package com.example.p12_joiefull.domain.model
 
 import com.squareup.moshi.Json
 

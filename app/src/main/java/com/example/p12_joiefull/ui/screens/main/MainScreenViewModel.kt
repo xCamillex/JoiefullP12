@@ -1,11 +1,11 @@
-package com.example.p12_joiefull.ui
+package com.example.p12_joiefull.ui.screens.main
 
 import android.content.Context
 import android.content.Intent
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.p12_joiefull.data.repository.Repository
-import com.example.p12_joiefull.model.Product
+import com.example.p12_joiefull.domain.model.Product
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
