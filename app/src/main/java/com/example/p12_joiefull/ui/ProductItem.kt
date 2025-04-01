@@ -1,6 +1,8 @@
 package com.example.p12_joiefull.ui
 
+import android.widget.Toast
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -11,15 +13,22 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.outlined.FavoriteBorder
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -38,6 +47,10 @@ fun ProductItem(
     product: Product,
     modifier: Modifier = Modifier,
 ) {
+    var isFavorite by remember { mutableStateOf(false) }
+    val context = LocalContext.current
+    val isInPreview = LocalInspectionMode.current
+
     Column(
         modifier = modifier
     ) {
@@ -71,11 +84,21 @@ fun ProductItem(
                     Row(
                         modifier = Modifier
                             .align(Alignment.Center)
+                            .clickable {
+                                isFavorite = !isFavorite
+                                val message = if (isFavorite) {
+                                    "Article ajouté aux favoris"
+                                } else {
+                                    "Article retiré des favoris"
+                                }
+                                if (!isInPreview) {
+                                    Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
+                                }
+                            }
                     ) {
-
                         Icon(
-                            imageVector = Icons.Outlined.FavoriteBorder,
-                            contentDescription = "Like",
+                            imageVector = if (isFavorite) Icons.Filled.Favorite else Icons.Outlined.FavoriteBorder,
+                            contentDescription = if (isFavorite) "Retirer des favoris" else "Ajouter aux favoris",
                             tint = Color.Black,
                             modifier = Modifier
                                 .size(18.dp)

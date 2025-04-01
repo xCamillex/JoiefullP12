@@ -1,7 +1,9 @@
 package com.example.p12_joiefull.ui
 
+import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -15,6 +17,7 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.outlined.FavoriteBorder
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -61,6 +64,9 @@ fun ProductDetail(
     var rating by remember {
         mutableStateOf(0f)
     }
+
+    var isFavorite by remember { mutableStateOf(false) }
+
     Column(
         modifier = modifier.fillMaxSize()
     ) {
@@ -92,7 +98,7 @@ fun ProductDetail(
                     ) {
                         Icon(
                             imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-                            contentDescription = "Back to main screen button",
+                            contentDescription = "Bouton de retour à l'écran principal",
                             tint = Color.Black
                         )
                     }
@@ -107,7 +113,7 @@ fun ProductDetail(
                 ) {
                     Icon(
                         painter = painterResource(R.drawable.ic_share),
-                        contentDescription = "Share button",
+                        contentDescription = "Bouton de partage",
                         tint = Color.Black
                     )
                 }
@@ -126,12 +132,21 @@ fun ProductDetail(
                     Row(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .padding(6.dp),
+                            .padding(6.dp)
+                            .clickable {
+                                isFavorite = !isFavorite
+                                val message = if (isFavorite) {
+                                    "Article ajouté aux favoris"
+                                } else {
+                                    "Article retiré des favoris"
+                                }
+                                Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
+                            },
                         verticalAlignment = Alignment.CenterVertically // Aligner verticalement au centre
                     ) {
                         Icon(
-                            imageVector = Icons.Outlined.FavoriteBorder,
-                            contentDescription = "Like counter",
+                            imageVector = if (isFavorite) Icons.Filled.Favorite else Icons.Outlined.FavoriteBorder,
+                            contentDescription = if (isFavorite) "Retirer des favoris" else "Ajouter aux favoris",
                             tint = Color.Black,
                             modifier = Modifier
                                 .size(20.dp)
@@ -166,7 +181,7 @@ fun ProductDetail(
                 Icon(
                     painter = painterResource(R.drawable.star),
                     tint = Color(0xFFFFC700),
-                    contentDescription = "Rate",
+                    contentDescription = "Note de l'article",
                     modifier = Modifier
                         .size(20.dp)
                         .align(Alignment.CenterVertically)
