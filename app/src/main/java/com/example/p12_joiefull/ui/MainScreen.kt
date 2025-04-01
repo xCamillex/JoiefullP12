@@ -181,6 +181,7 @@ class FakeViewModel : MainActivityViewModel(FakeRepository()) {
                 ),
                 price = 49.99,
                 originalPrice = 79.99,
+                rating = 4.6f,
                 likes = 120
             )
         )

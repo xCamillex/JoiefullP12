@@ -188,7 +188,7 @@ fun ProductDetail(
                 )
                 Spacer(modifier = Modifier.padding(4.dp))
                 Text(
-                    text = product.likes.toString(),
+                    text = product.rating.toString(),
                     fontWeight = FontWeight.Bold,
                     fontSize = 20.sp,
                     textAlign = TextAlign.Right,
@@ -265,9 +265,10 @@ class FakeRepository : Repository(apiService = FakeApiService()) {
                     url = "https://via.placeholder.com/150",
                     description = "Image d'une robe élégante"
                 ),
+                likes = 120,
+                rating = 4.6f,
                 price = 49.99,
-                originalPrice = 79.99,
-                likes = 120
+                originalPrice = 79.99
             )
         )
     }
@@ -285,9 +286,10 @@ class FakeApiService : ApiService {
                     url = "https://via.placeholder.com/150",
                     description = "Image d'une robe élégante"
                 ),
+                likes = 120,
+                rating = 4.6f,
                 price = 49.99,
-                originalPrice = 79.99,
-                likes = 120
+                originalPrice = 79.99
             )
         )
     }

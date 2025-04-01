@@ -8,6 +8,7 @@ data class Product(
     val name: String,
     val category: String,
     val likes: Int,
+    val rating: Float = 3.5f,
     val price: Double,
     @Json(name = "original_price")
     val originalPrice: Double

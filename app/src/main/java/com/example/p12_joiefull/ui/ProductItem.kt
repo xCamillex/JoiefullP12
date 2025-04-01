@@ -134,7 +134,7 @@ fun ProductItem(
                 Icon(
                     painter = painterResource(R.drawable.star),
                     tint = Color(0xFFFFC700),
-                    contentDescription = "Rate",
+                    contentDescription = "Note de l'article",
                     modifier = Modifier
                         .size(12.dp)
                         .align(Alignment.CenterVertically)
@@ -142,7 +142,7 @@ fun ProductItem(
                 Spacer(modifier = Modifier.width(4.dp))
 
                 Text(
-                    text = "4.6",
+                    text = product.rating.toString(),
                     fontWeight = FontWeight.Bold,
                     fontSize = 12.sp,
                     textAlign = TextAlign.Right,
@@ -189,6 +189,7 @@ fun ProductItemPreview() {
             name = "Robe élégante",
             category = "Vêtements",
             likes = 120,
+            rating = 4.6f,
             price = 49.99,
             originalPrice = 79.99
         ),
