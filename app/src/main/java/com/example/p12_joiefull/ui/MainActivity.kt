@@ -10,7 +10,7 @@ import androidx.compose.runtime.getValue
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.navigation.compose.rememberNavController
 import com.example.p12_joiefull.navigation.AppNavHost
-import com.example.p12_joiefull.ui.screens.main.MainActivityViewModel
+import com.example.p12_joiefull.ui.screens.main.MainScreenViewModel
 
 import com.example.p12_joiefull.ui.theme.P12_JoiefullTheme
 import dagger.hilt.android.AndroidEntryPoint
@@ -18,7 +18,7 @@ import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
-    private val viewModel: MainActivityViewModel by viewModels()
+    private val viewModel: MainScreenViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         installSplashScreen()
@@ -28,15 +28,12 @@ class MainActivity : ComponentActivity() {
 
         setContent {
             P12_JoiefullTheme {
-                val products by viewModel.products.collectAsState(initial = emptyList())
                 val navController = rememberNavController()
 
                 AppNavHost(
                     navController = navController,
-                    products = products,
                     viewModel = viewModel
                 )
-
             }
         }
     }

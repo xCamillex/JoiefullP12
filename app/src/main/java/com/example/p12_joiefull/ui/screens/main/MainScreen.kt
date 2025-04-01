@@ -31,16 +31,17 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
+import com.example.p12_joiefull.data.remote.ApiService
+import com.example.p12_joiefull.data.repository.Repository
 import com.example.p12_joiefull.domain.model.Picture
 import com.example.p12_joiefull.domain.model.Product
-import com.example.p12_joiefull.ui.screens.detail.FakeRepository
 import com.example.p12_joiefull.ui.screens.detail.ProductDetail
 import com.example.p12_joiefull.ui.components.ProductItem
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 
 @Composable
-fun MainScreen(viewModel: MainActivityViewModel, navHostController: NavHostController) {
+fun MainScreen(viewModel: MainScreenViewModel, navHostController: NavHostController) {
     // Observe la liste des produits avec collectAsState()
     val products by viewModel.products.collectAsState()
     val isLoading by viewModel.isLoading.collectAsState()
@@ -51,14 +52,17 @@ fun MainScreen(viewModel: MainActivityViewModel, navHostController: NavHostContr
                 CircularProgressIndicator()
             }
         } else {
-            BoxWithConstraints {
-                val screenWidth = maxWidth
-                val groupedProducts = products.groupBy { it.category }
-                //Vérifie si l'appareil est un smartphone ou une tablette et adapter l'affichage
-                if (screenWidth < 600.dp) {
-                    SmartphoneMainScreen(products, navHostController)
-                } else {
-                    TabletMainScreen(products, navHostController, viewModel)
+            if (products.isEmpty()) {
+                Text("Aucun produit trouvé")
+            } else {
+                BoxWithConstraints {
+                    val screenWidth = maxWidth
+                    //Vérifie si l'appareil est un smartphone ou une tablette et adapter l'affichage
+                    if (screenWidth < 600.dp) {
+                        SmartphoneMainScreen(products, navHostController)
+                    } else {
+                        TabletMainScreen(products, navHostController, viewModel)
+                    }
                 }
             }
         }
@@ -106,7 +110,7 @@ fun SmartphoneMainScreen(
 fun TabletMainScreen(
     productList: List<Product>,
     navHostController: NavHostController,
-    viewModel: MainActivityViewModel
+    viewModel: MainScreenViewModel
 ) {
     var itemSelected by remember {
         mutableStateOf<Product?>(null)
@@ -161,16 +165,57 @@ fun TabletMainScreen(
                 ProductDetail(
                     viewModel,
                     navHostController,
-                    product,
+                    product.id,
                     Modifier,
-                    showBackButton = false // Désactiver le bouton "Back" en mode tablette
+                    showBackButton = false
                 )
             }
         }
     }
 }
 
-class FakeViewModel : MainActivityViewModel(FakeRepository()) {
+class FakeRepository : Repository(apiService = FakeApiService()) {
+    override suspend fun getProducts(): List<Product> {
+        return listOf(
+            Product(
+                id = 1,
+                name = "Robe élégante",
+                category = "Vêtements",
+                picture = Picture(
+                    url = "https://via.placeholder.com/150",
+                    description = "Image d'une robe élégante"
+                ),
+                likes = 120,
+                rating = 4.6f,
+                price = 49.99,
+                originalPrice = 79.99
+            )
+        )
+    }
+}
+
+// Simuler un ApiService factice
+class FakeApiService : ApiService {
+    override suspend fun getProducts(): List<Product> {
+        return listOf(
+            Product(
+                id = 1,
+                name = "Robe élégante",
+                category = "Sample Category",
+                picture = Picture(
+                    url = "https://via.placeholder.com/150",
+                    description = "Image d'une robe élégante"
+                ),
+                likes = 120,
+                rating = 4.6f,
+                price = 49.99,
+                originalPrice = 79.99
+            )
+        )
+    }
+}
+
+class FakeViewModel : MainScreenViewModel(FakeRepository()) {
     override val products: StateFlow<List<Product>> = MutableStateFlow(
         listOf(
             Product(

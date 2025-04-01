@@ -1,5 +1,6 @@
 package com.example.p12_joiefull.ui.screens.detail
 
+import android.content.Context
 import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -24,10 +25,11 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -41,33 +43,73 @@ import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
-import androidx.navigation.compose.rememberNavController
 import coil.compose.AsyncImage
 import coil.compose.rememberAsyncImagePainter
 import com.example.p12_joiefull.R
-import com.example.p12_joiefull.data.remote.ApiService
-import com.example.p12_joiefull.data.repository.Repository
 import com.example.p12_joiefull.domain.model.Picture
 import com.example.p12_joiefull.domain.model.Product
 import com.example.p12_joiefull.ui.components.StarRatingBar
-import com.example.p12_joiefull.ui.screens.main.MainActivityViewModel
-import kotlinx.coroutines.runBlocking
-
+import com.example.p12_joiefull.ui.screens.main.MainScreenViewModel
 
 @Composable
 fun ProductDetail(
-    viewModel: MainActivityViewModel,
+    viewModel: MainScreenViewModel,
     navController: NavController,
-    product: Product,
+    productId: Int,
     modifier: Modifier = Modifier,
-    showBackButton: Boolean = true
+    showBackButton: Boolean = true,
 ) {
-    var rating by remember {
-        mutableStateOf(0f)
+    val detailViewModel: ProductDetailViewModel = hiltViewModel()
+    val uiState by detailViewModel.uiState.collectAsState()
+    val context = LocalContext.current
+
+    LaunchedEffect(productId) {
+        viewModel.getProductById(productId)?.let { detailViewModel.loadProduct(it) }
     }
 
-    var isFavorite by remember { mutableStateOf(false) }
+    LaunchedEffect(detailViewModel.events) {
+        detailViewModel.events.collect { event ->
+            when (event) {
+                is ProductDetailViewModel.ProductDetailEvent.ShareProduct -> {
+                    viewModel.shareProduct(context, event.product)
+                }
+            }
+        }
+    }
+
+    uiState.product?.let { product ->
+        ProductDetailContent(
+            product = product,
+            isFavorite = uiState.isFavorite,
+            onBack = { navController.navigateUp() },
+            onToggleFavorite = { detailViewModel.toggleFavorite() },
+            onShare = { detailViewModel.shareProduct(context) },
+            rating = uiState.rating,
+            onRatingChanged = { detailViewModel.updateRating(it) },
+            modifier = modifier,
+            context = context,
+            showBackButton = showBackButton,
+        )
+    }
+}
+
+@Composable
+fun ProductDetailContent(
+    product: Product,
+    isFavorite: Boolean,
+    onBack: () -> Unit,
+    onToggleFavorite: () -> Unit,
+    onShare: () -> Unit,
+    rating: Float,
+    onRatingChanged: (Float) -> Unit,
+    modifier: Modifier = Modifier,
+    context: Context? = null,
+    showBackButton: Boolean = true,
+) {
+    val actualContext = context ?: LocalContext.current
+    val currentRating = remember { mutableStateOf(0.0f) }
 
     Column(
         modifier = modifier.fillMaxSize()
@@ -93,7 +135,7 @@ fun ProductDetail(
                 )
                 if (showBackButton) {
                     IconButton(
-                        onClick = { navController.navigateUp() },
+                        onClick = onBack,
                         modifier = Modifier
                             .align(Alignment.TopStart)
                             .size(70.dp),
@@ -105,10 +147,9 @@ fun ProductDetail(
                         )
                     }
                 }
-                val context = LocalContext.current
-                IconButton(
 
-                    onClick = { viewModel.shareProduct(context, product) },
+                IconButton(
+                    onClick = onShare,
                     modifier = Modifier
                         .align(Alignment.TopEnd)
                         .size(70.dp)
@@ -136,7 +177,7 @@ fun ProductDetail(
                             .fillMaxWidth()
                             .padding(6.dp)
                             .clickable {
-                                isFavorite = !isFavorite
+                                onToggleFavorite()
                                 val message = if (isFavorite) {
                                     "Article ajouté aux favoris"
                                 } else {
@@ -152,7 +193,7 @@ fun ProductDetail(
                             tint = Color.Black,
                             modifier = Modifier
                                 .size(20.dp)
-                                .align(Alignment.CenterVertically)
+                            // .align(Alignment.CenterVertically)
                         )
                         Text(
                             text = product.likes.toString(),
@@ -186,7 +227,7 @@ fun ProductDetail(
                     contentDescription = "Note de l'article",
                     modifier = Modifier
                         .size(20.dp)
-                        .align(Alignment.CenterVertically)
+                    // .align(Alignment.CenterVertically)
                 )
                 Spacer(modifier = Modifier.padding(4.dp))
                 Text(
@@ -194,7 +235,7 @@ fun ProductDetail(
                     fontWeight = FontWeight.Bold,
                     fontSize = 20.sp,
                     textAlign = TextAlign.Right,
-                    modifier = Modifier
+                    //modifier = Modifier
                 )
             }
             Row(
@@ -213,7 +254,7 @@ fun ProductDetail(
                     textAlign = TextAlign.Right,
                     color = Color.Gray,
                     textDecoration = TextDecoration.LineThrough, // Adds a strikethrough
-                    modifier = Modifier
+                    // modifier = Modifier
                 )
             }
 
@@ -235,9 +276,10 @@ fun ProductDetail(
                 Spacer(modifier = Modifier.padding(8.dp))
                 StarRatingBar(
                     maxStars = 5,
-                    rating = rating,
+                    rating = currentRating.value,
                     onRatingChanged = {
-                        rating = it
+                        currentRating.value = it // Mettre à jour la valeur de rating
+                        onRatingChanged(it)
                     }
                 )
             }
@@ -256,61 +298,33 @@ fun ProductDetail(
     }
 }
 
-class FakeRepository : Repository(apiService = FakeApiService()) {
-    override suspend fun getProducts(): List<Product> {
-        return listOf(
-            Product(
-                id = 1,
-                name = "Robe élégante",
-                category = "Vêtements",
-                picture = Picture(
-                    url = "https://via.placeholder.com/150",
-                    description = "Image d'une robe élégante"
-                ),
-                likes = 120,
-                rating = 4.6f,
-                price = 49.99,
-                originalPrice = 79.99
-            )
-        )
-    }
-}
-
-// Simuler un ApiService factice
-class FakeApiService : ApiService {
-    override suspend fun getProducts(): List<Product> {
-        return listOf(
-            Product(
-                id = 1,
-                name = "Robe élégante",
-                category = "Sample Category",
-                picture = Picture(
-                    url = "https://via.placeholder.com/150",
-                    description = "Image d'une robe élégante"
-                ),
-                likes = 120,
-                rating = 4.6f,
-                price = 49.99,
-                originalPrice = 79.99
-            )
-        )
-    }
-}
-
 @Preview(showBackground = true)
 @Composable
-fun PreviewProductDetail() {
-    val fakeRepository = FakeRepository()
-    val fakeViewModel = MainActivityViewModel(fakeRepository)
+fun ProductDetailPreview() {
+    val fakeProduct = Product(
+        id = 1,
+        name = "Robe élégante",
+        category = "Vêtements",
+        picture = Picture(
+            url = "https://via.placeholder.com/150",
+            description = "Image d'une robe élégante"
+        ),
+        likes = 120,
+        rating = 4.6f,
+        price = 49.99,
+        originalPrice = 79.99
+    )
 
-    val fakeProduct = runBlocking {
-        fakeRepository.getProducts().first()
-    }
-
-    ProductDetail(
-        viewModel = fakeViewModel,
-        navController = rememberNavController(),
+    ProductDetailContent(
         product = fakeProduct,
-        modifier = Modifier
+        isFavorite = false,
+        onBack = {},
+        onToggleFavorite = {},
+        onShare = {},
+        rating = 4.6f,
+        onRatingChanged = {},
+        modifier = Modifier,
+        context = LocalContext.current,
+        showBackButton = true,
     )
 }

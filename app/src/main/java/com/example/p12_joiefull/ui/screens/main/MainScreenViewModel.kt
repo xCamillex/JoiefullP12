@@ -13,7 +13,7 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-open class MainActivityViewModel @Inject constructor(
+open class MainScreenViewModel @Inject constructor(
     private val productRepository: Repository
 ) : ViewModel() {
 
@@ -47,5 +47,8 @@ open class MainActivityViewModel @Inject constructor(
         // Utilisez le contexte pour démarrer l'intention et afficher le sélecteur de partage
         context.startActivity(Intent.createChooser(shareIntent, "Partage cet article via"))
 
+    }
+    fun getProductById(productId: Int): Product? {
+        return _products.value.find { it.id == productId }
     }
 }
