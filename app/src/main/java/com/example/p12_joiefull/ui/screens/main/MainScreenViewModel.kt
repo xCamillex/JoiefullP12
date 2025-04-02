@@ -28,7 +28,7 @@ open class MainScreenViewModel @Inject constructor(
     }
 
     // Fonction pour récupérer la liste des produits
-    private fun getProductList() {
+   private fun getProductList() {
         viewModelScope.launch {
             _isLoading.value = true
             val productsList = productRepository.getProducts()

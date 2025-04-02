@@ -101,6 +101,8 @@ dependencies {
     testImplementation(kotlin("test"))
     testImplementation(libs.mockk)
     testImplementation(libs.kotlinx.coroutines.test)
+    testImplementation(libs.androidx.core)
+    testImplementation(libs.kotlinx.coroutines.test.v180)
 }
 kapt {
     correctErrorTypes = true
