@@ -103,6 +103,7 @@ dependencies {
     testImplementation(libs.kotlinx.coroutines.test)
     testImplementation(libs.androidx.core)
     testImplementation(libs.kotlinx.coroutines.test.v180)
+    testImplementation(libs.turbine)
 }
 kapt {
     correctErrorTypes = true

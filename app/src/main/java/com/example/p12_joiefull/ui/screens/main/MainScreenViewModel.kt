@@ -23,31 +23,45 @@ open class MainScreenViewModel @Inject constructor(
     private val _isLoading = MutableStateFlow(false)
     open val isLoading: StateFlow<Boolean> = _isLoading
 
+    private val _error = MutableStateFlow<String?>(null)
+    open val error: StateFlow<String?> = _error
+
     init {
         getProductList()
     }
 
     // Fonction pour récupérer la liste des produits
-   private fun getProductList() {
+    fun getProductList() {
         viewModelScope.launch {
             _isLoading.value = true
-            val productsList = productRepository.getProducts()
-            _products.value = productsList
-            _isLoading.value = false
+            _error.value = null
+            try {
+                val productsList = productRepository.getProducts()
+                _products.value = productsList
+            } catch (e: Exception) {
+                _error.value = e.message
+            } finally {
+                _isLoading.value = false
+            }
         }
     }
+
     fun shareProduct(context: Context, product: Product) {
         // Créez une intention de partage
         val shareIntent = Intent().apply {
             action = Intent.ACTION_SEND
             type = "text/plain"
-            putExtra(Intent.EXTRA_TEXT, "Regarde cet article : ${product.name} \n ${product.picture.url}")
+            putExtra(
+                Intent.EXTRA_TEXT,
+                "Regarde cet article : ${product.name} \n ${product.picture.url}"
+            )
         }
 
         // Utilisez le contexte pour démarrer l'intention et afficher le sélecteur de partage
         context.startActivity(Intent.createChooser(shareIntent, "Partage cet article via"))
 
     }
+
     fun getProductById(productId: Int): Product? {
         return _products.value.find { it.id == productId }
     }
