@@ -4,6 +4,7 @@ import android.content.Context
 import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -20,6 +21,7 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.outlined.FavoriteBorder
 import androidx.compose.material3.Icon
@@ -38,7 +40,10 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextDecoration
@@ -110,11 +115,12 @@ fun ProductDetailContent(
     context: Context? = null,
     showBackButton: Boolean = true,
 ) {
-    val actualContext = context ?: LocalContext.current
     val currentRating = remember { mutableStateOf(0.0f) }
 
     Column(
-        modifier = modifier.fillMaxSize()
+        modifier = modifier
+            .fillMaxSize()
+            .background(Color.White)
     ) {
         Column(
             modifier = Modifier
@@ -126,7 +132,6 @@ fun ProductDetailContent(
                     .fillMaxWidth()
                     .weight(1f)
             ) {
-
                 AsyncImage(
                     model = product.picture.url,
                     contentDescription = product.picture.description,
@@ -144,12 +149,11 @@ fun ProductDetailContent(
                     ) {
                         Icon(
                             imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-                            contentDescription = "Bouton de retour à l'écran principal",
+                            contentDescription = "Retour à l'écran principal",
                             tint = Color.Black
                         )
                     }
                 }
-
                 IconButton(
                     onClick = onShare,
                     modifier = Modifier
@@ -158,7 +162,7 @@ fun ProductDetailContent(
                 ) {
                     Icon(
                         painter = painterResource(R.drawable.ic_share),
-                        contentDescription = "Bouton de partage",
+                        contentDescription = "Partager cet article",
                         tint = Color.Black
                     )
                 }
@@ -172,7 +176,6 @@ fun ProductDetailContent(
                         )
                         .clip(RoundedCornerShape(16.dp))
                         .background(Color.White),
-                    contentAlignment = Alignment.Center
                 ) {
                     Row(
                         modifier = Modifier
@@ -180,19 +183,26 @@ fun ProductDetailContent(
                             .padding(6.dp)
                             .clickable {
                                 onToggleFavorite()
-                                val message = if (isFavorite) {
+                                val message = if (!isFavorite) {
                                     "Article ajouté aux favoris"
                                 } else {
                                     "Article retiré des favoris"
                                 }
                                 Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
+                            }
+                            .semantics {
+                                contentDescription = if (isFavorite) {
+                                    "Retirer des favoris"
+                                } else {
+                                    "Ajouter aux favoris"
+                                }
                             },
                         horizontalArrangement = Arrangement.Center, // Centre horizontalement
                         verticalAlignment = Alignment.CenterVertically // Centre verticalement
                     ) {
                         Icon(
                             imageVector = if (isFavorite) Icons.Filled.Favorite else Icons.Outlined.FavoriteBorder,
-                            contentDescription = if (isFavorite) "Retirer des favoris" else "Ajouter aux favoris",
+                            contentDescription = null,
                             tint = Color.Black,
                             modifier = Modifier
                                 .size(20.dp)
@@ -200,11 +210,14 @@ fun ProductDetailContent(
                         Spacer(modifier = Modifier.width(4.dp))
                         Text(
                             text = product.likes.toString(),
-                            fontSize = 18.sp, // Taille du texte
+                            fontSize = 18.sp,
                             color = Color.Black,
-                            fontWeight = FontWeight.Bold, // Mettre le texte en gras
+                            fontWeight = FontWeight.Bold,
                             modifier = Modifier
                                 .offset(y = (-2).dp, x = (2).dp)
+                                .semantics {
+                                    contentDescription = "${product.likes} J'aime à cet article"
+                                }
                         )
                     }
                 }
@@ -212,7 +225,7 @@ fun ProductDetailContent(
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(top = 8.dp)
+                    .padding(top = 20.dp)
             ) {
                 Text(
                     text = product.name,
@@ -222,38 +235,47 @@ fun ProductDetailContent(
                 )
                 Icon(
                     painter = painterResource(R.drawable.star),
-                    tint = Color(0xFFFFC700),
-                    contentDescription = "Note de l'article",
+                    tint = colorResource(R.color.orange),
+                    contentDescription = null,
                     modifier = Modifier
-                        .size(20.dp)
-                    // .align(Alignment.CenterVertically)
+                        .size(25.dp)
                 )
-                Spacer(modifier = Modifier.padding(4.dp))
+                Spacer(modifier = Modifier.width(4.dp))
                 Text(
                     text = product.rating.toString(),
-                    fontWeight = FontWeight.Bold,
                     fontSize = 20.sp,
                     textAlign = TextAlign.Right,
-                    //modifier = Modifier
+                    modifier = Modifier.semantics {
+                        contentDescription =
+                            "\"Evaluation de l'article : ${product.rating} étoiles \"},"
+                    }
+
                 )
             }
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(top = 8.dp)
+                    .padding(bottom = 8.dp),
             ) {
                 Text(
-                    text = "${product.price} €",
-                    fontWeight = FontWeight.Bold,
-                    modifier = Modifier.weight(1f)
+                    text = "${product.price.toInt()} €",
+                    modifier = Modifier
+                        .weight(1f)
+                        .semantics {
+                            contentDescription =
+                                "Prix de l'article : ${product.price.toInt()} euros "
+                        },
                 )
                 Text(
-                    text = "${product.originalPrice} €",
-                    fontWeight = FontWeight.Bold,
+                    text = "${product.originalPrice.toInt()} €",
                     textAlign = TextAlign.Right,
-                    color = Color.Gray,
-                    textDecoration = TextDecoration.LineThrough, // Adds a strikethrough
-                    // modifier = Modifier
+                    color = Color.Black,
+                    textDecoration = TextDecoration.LineThrough,
+                    modifier = Modifier.semantics {
+                        contentDescription =
+                            "Ancien prix de l'article : ${product.originalPrice.toInt()} euros "
+                    },
                 )
             }
 
@@ -266,7 +288,7 @@ fun ProductDetailContent(
             ) {
                 Image(
                     painter = rememberAsyncImagePainter("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSzBNfBc8ZLnKfs7PR_RX20u2bxqIsq-Sa2xw&s"),
-                    contentDescription = "avatar photo",
+                    contentDescription = "avatar de l'utilisateur",
                     modifier = Modifier
                         .size(50.dp)
                         .clip(CircleShape),
@@ -279,6 +301,7 @@ fun ProductDetailContent(
                     onRatingChanged = {
                         currentRating.value = it // Mettre à jour la valeur de rating
                         onRatingChanged(it)
+
                     }
                 )
             }
@@ -287,12 +310,55 @@ fun ProductDetailContent(
             OutlinedTextField(
                 value = textState.value,
                 onValueChange = { textState.value = it },
-                label = { Text("Partagez ici vos impressions sur cette pièce") },
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(top = 8.dp),
+                    .padding(top = 8.dp)
+                    .semantics {
+                        contentDescription = "Champ de saisie pour votre avis sur l'article"
+                    },
+                placeholder = {
+                    Text(
+                        text = "Partagez ici vos impressions sur cette pièce",
+                        color = Color.Black
+                    )
+                },
                 shape = RoundedCornerShape(16.dp),  // Ensure the border respects the rounded corners
             )
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(top = 8.dp)
+            ) {
+                Icon(
+                    imageVector = Icons.Default.Add,
+                    contentDescription = "Ajouter votre avis",
+                    modifier = Modifier
+                        .align(Alignment.CenterEnd)
+                        .border(
+                            width = 2.dp,
+                            color = Color.Gray,
+                            shape = CircleShape
+                        )
+                        .size(30.dp)
+                        .clickable {
+                            if (currentRating.value > 0 && textState.value.isNotEmpty()) {
+                                currentRating.value = 0F
+                                textState.value = ""
+                                Toast.makeText(
+                                    context,
+                                    "Votre avis a été ajouté",
+                                    Toast.LENGTH_SHORT
+                                ).show()
+                            } else {
+                                Toast.makeText(
+                                    context,
+                                    "Veuillez saisir une note et un commentaire avant d'ajouter votre avis",
+                                    Toast.LENGTH_SHORT
+                                ).show()
+                            }
+                        }
+                )
+            }
         }
     }
 }

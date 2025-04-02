@@ -11,8 +11,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.p12_joiefull.R
@@ -25,7 +27,7 @@ fun StarRatingBar(
     onRatingChanged: (Float) -> Unit
 ) {
 
-    val starSize = 30.dp
+    val starSize = 40.dp
     val starSpacing = 15.dp
 
     Row(
@@ -34,18 +36,17 @@ fun StarRatingBar(
     ) {
         for (i in 1..maxStars) {
             val isSelected = i <= rating
-            // Use Filled Star if selected, Outlined Star if not
             val icon = if (isSelected) {
                 painterResource(R.drawable.star)
             } else {
                 painterResource(R.drawable.star_outline)
             }
             val iconTintColor =
-                if (isSelected) Color(0xFFFFC700) else Color.Black // Adjust color as needed
+                if (isSelected) colorResource(R.color.orange) else Color.Black
 
             Icon(
                 painter = icon,
-                contentDescription = "note de $i étoiles",
+                contentDescription = "Attribuer la note $i étoile${if (i > 1) "s" else ""}",
                 tint = iconTintColor,
                 modifier = Modifier
                     .selectable(
@@ -56,6 +57,9 @@ fun StarRatingBar(
                     )
                     .width(starSize)
                     .height(starSize)
+                    .semantics {
+                        contentDescription = "Attribuer la note $i étoile${if (i > 1) "s" else ""}"
+                    }
             )
 
             if (i < maxStars) {

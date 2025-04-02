@@ -3,10 +3,10 @@ package com.example.p12_joiefull.ui.components
 import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -29,7 +29,11 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalInspectionMode
+import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.semantics.clearAndSetSemantics
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextDecoration
@@ -59,9 +63,7 @@ fun ProductItem(
             Box(
                 modifier = Modifier
                     .size(150.dp)
-                    .clip(RoundedCornerShape(16.dp))
             ) {
-
                 AsyncImage(
                     model = product.picture.url,
                     contentDescription = product.picture.description,
@@ -72,14 +74,15 @@ fun ProductItem(
                 )
                 Box(
                     modifier = Modifier
-                        .size(42.dp, 16.dp)
+                        .size(42.dp, 20.dp)
                         .align(Alignment.BottomEnd)
                         .offset(
                             x = (-8).dp,
                             y = (-8).dp
                         )
                         .clip(RoundedCornerShape(16.dp))
-                        .background(Color.White)
+                        .background(Color.White),
+                    contentAlignment = Alignment.Center
                 ) {
                     Row(
                         modifier = Modifier
@@ -94,14 +97,16 @@ fun ProductItem(
                                 if (!isInPreview) {
                                     Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
                                 }
-                            }
+                            },
+                        horizontalArrangement = Arrangement.Center,
+                        verticalAlignment = Alignment.CenterVertically
                     ) {
                         Icon(
                             imageVector = if (isFavorite) Icons.Filled.Favorite else Icons.Outlined.FavoriteBorder,
                             contentDescription = if (isFavorite) "Retirer des favoris" else "Ajouter aux favoris",
                             tint = Color.Black,
                             modifier = Modifier
-                                .size(18.dp)
+                                .size(16.dp)
                         )
                         Text(
                             text = product.likes.toString(),
@@ -109,7 +114,10 @@ fun ProductItem(
                             color = Color.Black,
                             fontWeight = FontWeight.Bold,
                             modifier = Modifier
-                                .offset(y = (-4).dp, x = (2).dp)
+                                .offset(y = (-2).dp, x = (2).dp)
+                                .semantics {
+                                    contentDescription = "${product.likes} J'aime à cet article"
+                                },
                         )
                     }
                 }
@@ -117,13 +125,14 @@ fun ProductItem(
             Row(
                 modifier = Modifier
                     .width(150.dp)
-                    .padding(top = 4.dp),
+                    .padding(top = 8.dp)
             ) {
                 Text(
                     text = product.name,
                     modifier = Modifier
                         .align(Alignment.CenterVertically)
-                        .weight(1f),
+                        .weight(1f)
+                        .semantics { contentDescription = "Nom de l'article : ${product.name} " },
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis,
                     fontWeight = FontWeight.Bold,
@@ -131,42 +140,52 @@ fun ProductItem(
                 )
                 Icon(
                     painter = painterResource(R.drawable.star),
-                    tint = Color(0xFFFFC700),
-                    contentDescription = "Note de l'article",
+                    tint = colorResource(R.color.orange),
+                    contentDescription = "Evaluation de l'article",
                     modifier = Modifier
-                        .size(12.dp)
+                        .size(18.dp)
                         .align(Alignment.CenterVertically)
+                        .clearAndSetSemantics { }
                 )
-                Spacer(modifier = Modifier.width(4.dp))
-
                 Text(
                     text = product.rating.toString(),
-                    fontWeight = FontWeight.Bold,
                     fontSize = 12.sp,
                     textAlign = TextAlign.Right,
-                    modifier = Modifier.align(Alignment.CenterVertically)
+                    modifier = Modifier
+                        .align(Alignment.CenterVertically)
+                        .semantics {
+                            contentDescription =
+                                "Evaluation de l'article : ${product.rating} étoiles "
+                        },
                 )
             }
-            // Row to display price and original price
             Row(
                 modifier = Modifier
                     .width(150.dp)
-                    .padding(top = 4.dp),
+                    .padding(top = 4.dp)
             ) {
                 Text(
                     text = "${product.price.toInt()}€",
-                    fontWeight = FontWeight.Bold,
-                    modifier = Modifier.weight(1f),
+                    modifier = Modifier
+                        .weight(1f)
+                        .semantics {
+                            contentDescription =
+                                "Prix de l'article : ${product.price.toInt()} euros "
+                        },
                     fontSize = 12.sp,
 
                     )
                 Text(
                     text = "${product.originalPrice.toInt()}€",
-                    fontWeight = FontWeight.Bold,
-                    color = Color.Gray,
+                    color = Color.Black,
                     textAlign = TextAlign.Right,
                     textDecoration = TextDecoration.LineThrough,
-                    modifier = Modifier.align(Alignment.CenterVertically),
+                    modifier = Modifier
+                        .align(Alignment.CenterVertically)
+                        .semantics {
+                            contentDescription =
+                                "Ancien prix de l'article : ${product.originalPrice.toInt()} euros "
+                        },
                     fontSize = 12.sp,
                 )
             }
