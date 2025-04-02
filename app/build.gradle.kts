@@ -57,6 +57,7 @@ dependencies {
     implementation(libs.androidx.ui.graphics)
     implementation(libs.androidx.ui.tooling.preview)
     implementation(libs.androidx.material3)
+    implementation(libs.androidx.navigation.compose)
     implementation(libs.play.services.analytics.impl)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
@@ -71,7 +72,7 @@ dependencies {
     // ViewModel avec Compose
     implementation(libs.androidx.lifecycle.viewmodel.compose)
     implementation(libs.coil.compose)
-    implementation(libs.androidx.navigation.compose)
+
 
     // Retrofit
     implementation(libs.retrofit)
@@ -97,6 +98,9 @@ dependencies {
     implementation(libs.androidx.hilt.navigation.fragment)
     implementation(libs.androidx.hilt.navigation.compose)
     kapt(libs.hilt.compiler)
+    testImplementation(kotlin("test"))
+    testImplementation(libs.mockk)
+    testImplementation(libs.kotlinx.coroutines.test)
 }
 kapt {
     correctErrorTypes = true
