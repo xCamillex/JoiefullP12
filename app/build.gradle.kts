@@ -49,8 +49,13 @@ android {
 
 dependencies {
 
+    // --- Kotlin ---
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
+    implementation(libs.androidx.lifecycle.livedata.ktx)
+    implementation(libs.androidx.lifecycle.viewmodel.ktx)
+
+    // --- UI / Compose ---
     implementation(libs.androidx.activity.compose)
     implementation(platform(libs.androidx.compose.bom))
     implementation(libs.androidx.ui)
@@ -58,8 +63,39 @@ dependencies {
     implementation(libs.androidx.ui.tooling.preview)
     implementation(libs.androidx.material3)
     implementation(libs.androidx.navigation.compose)
-    implementation(libs.play.services.analytics.impl)
+    implementation(libs.coil.compose)
+    implementation(libs.compose)
+    implementation(libs.androidx.lifecycle.viewmodel.compose)
+
+    // --- Splash Screen ---
+    implementation(libs.androidx.core.splashscreen)
+
+    // --- Retrofit / Networking ---
+    implementation(libs.retrofit)
+    implementation(libs.logging.interceptor)
+    implementation(libs.converter.moshi)
+    implementation(libs.okhttp)
+
+    // --- JSON Parsing ---
+    implementation(libs.moshi.kotlin)
+    implementation(libs.moshi)
+    implementation(libs.json)
+
+    // --- Hilt / Dependency Injection ---
+    implementation(libs.hilt.android)
+    implementation(libs.androidx.hilt.navigation.fragment)
+    implementation(libs.androidx.hilt.navigation.compose)
+    kapt(libs.hilt.compiler)
+
+    // --- Testing - Unit Tests ---
     testImplementation(libs.junit)
+    testImplementation(kotlin("test"))
+    testImplementation(libs.mockk)
+    testImplementation(libs.kotlinx.coroutines.test)
+    testImplementation(libs.turbine)
+    testImplementation(libs.androidx.core)
+
+    // --- Testing - Instrumented Tests ---
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
     androidTestImplementation(platform(libs.androidx.compose.bom))
@@ -67,43 +103,6 @@ dependencies {
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
 
-    implementation(libs.androidx.core.splashscreen)
-
-    // ViewModel avec Compose
-    implementation(libs.androidx.lifecycle.viewmodel.compose)
-    implementation(libs.coil.compose)
-
-
-    // Retrofit
-    implementation(libs.retrofit)
-    implementation(libs.logging.interceptor)
-    implementation(libs.converter.moshi)
-    // Moshi JSON Library
-    implementation(libs.moshi.kotlin)
-    // OkHttp for HTTP client (included as Retrofit uses it internally)
-    implementation(libs.okhttp)
-    implementation(libs.json)
-    implementation(libs.moshi)
-
-
-    // Glide
-    implementation(libs.glide)
-    kapt("com.github.bumptech.glide:compiler:4.12.0")
-    implementation(libs.compose)
-
-    //Hilt
-    implementation(libs.hilt.android)
-    implementation(libs.androidx.lifecycle.livedata.ktx)
-    implementation(libs.androidx.lifecycle.viewmodel.ktx)
-    implementation(libs.androidx.hilt.navigation.fragment)
-    implementation(libs.androidx.hilt.navigation.compose)
-    kapt(libs.hilt.compiler)
-    testImplementation(kotlin("test"))
-    testImplementation(libs.mockk)
-    testImplementation(libs.kotlinx.coroutines.test)
-    testImplementation(libs.androidx.core)
-    testImplementation(libs.kotlinx.coroutines.test.v180)
-    testImplementation(libs.turbine)
 }
 kapt {
     correctErrorTypes = true
